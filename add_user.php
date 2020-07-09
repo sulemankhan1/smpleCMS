@@ -2,7 +2,9 @@
 <?php if($_SESSION['type'] === "student") {
   header("Location: index.php");
   exit;
-} ?>
+}
+$_SESSION['pg_name'] = 'users';
+?>
 <?=include('includes/sidebar.php')?>
 
 <!-- Content Wrapper. Contains page content -->

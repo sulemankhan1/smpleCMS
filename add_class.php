@@ -2,7 +2,9 @@
 <?php if($_SESSION['type'] === "student") {
   header("Location: index.php");
   exit;
-} ?>
+}
+$_SESSION['pg_name'] = 'classes';
+?>
 <?=include('includes/sidebar.php')?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -108,7 +110,7 @@
 //   }
 //
 //
-//    $q = "INSERT INTO `student_classes`
+//    $q = "INSERT INTO `classes`
 //        (`class_Title`, `subject`, `description`, `date_created`)
 //        VALUES
 //        ('".$_POST['class_Title']."', '".$_POST['subject']."','".$_POST['description']."', '".$_POST['date_created']."')";

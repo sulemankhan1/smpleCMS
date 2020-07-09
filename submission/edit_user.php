@@ -51,8 +51,8 @@ if(isset($_POST['submit'])) {
     if (mysqli_query($conn,$q) === true){
       
       $response = array(
-        "type" => "sucess",
-        "msg" => "user edited sucessfully"
+        "type" => "success",
+        "msg" => "user edited successfully"
       );
       $_SESSION['response'] = $response;
      header("location: ../users.php");

@@ -64,12 +64,16 @@ if($_SESSION['is_logged_in'] !== true) {
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-
+      
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex" data-toggle="dropdown">
           <div class="image">
-            <img src="<?='uploads/'.$_SESSION['profile_pic']?>" class="img-circle elevation-2" alt="User Image">
+            <?php if(!file_exists('uploads/'.$_SESSION['profile_pic'])) { ?>
+              <img src="<?='uploads/default-user.png'?>" class="img-circle elevation-2" alt="User Image">
+            <?php } else { ?>
+              <img src="<?='uploads/'.$_SESSION['profile_pic']?>" class="img-circle elevation-2" alt="User Image">
+            <?php } ?>
           </div>
           <div class="info">
             <a href="#" class="d-block"><?=ucfirst($_SESSION['name'])?></a>

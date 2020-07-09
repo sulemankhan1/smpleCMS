@@ -3,7 +3,7 @@
   header("Location: index.php");
   exit;
 }
-$_SESSION['pg_name'] = 'departments';
+$_SESSION['pg_name'] = 'courses';
 ?>
 <?=include('includes/sidebar.php')?>
 
@@ -14,7 +14,7 @@ $_SESSION['pg_name'] = 'departments';
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">DEPARTMENTS</h1>
+          <h1 class="m-0 text-dark">Courses</h1>
         </div><!-- /.col -->
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -32,7 +32,7 @@ $_SESSION['pg_name'] = 'departments';
 
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">All DEPARTMENTS </h3>
+              <h3 class="card-title">All Courses </h3>
               <a href="add_department.php" class="btn  btn-outline-success btn-sm float-right"><i class="fa fa-plus"></i> Add DEPARTMENT</a>
             </div>
             <div class="card-body">
@@ -44,7 +44,9 @@ $_SESSION['pg_name'] = 'departments';
               <?php
                   include("includes/connection.php");
 
-                  $q = "SELECT * FROM `departments`";
+                  $q = "SELECT `courses`.*, `users`.`name` as `teacher_name` FROM `courses`
+                  JOIN `users` ON `courses`.`teacher_id` = `users`.`id`
+                  ";
 
                   $records = mysqli_query($conn, $q);
 
@@ -58,8 +60,7 @@ $_SESSION['pg_name'] = 'departments';
                     <tr>
                         <th>ID </th>
                         <th>Name</th>
-                        <th>Phone</th>
-                        <th>Address</th>
+                        <th>Teacher</th>
                         <th>Action</th>
                     </tr>
                   </thead>
@@ -68,12 +69,11 @@ $_SESSION['pg_name'] = 'departments';
                         <tr>
                             <td><?=$record['id']?></td>
                             <td><?=$record['name']?></td>
-                            <td><?=$record['phone']?></td>
-                            <td><?=$record['address']?></td>
+                            <td><?=$record['teacher_name']?></td>
 
                             <td>
-                                <a href="edit_department.php?id=<?=$record['id']?>" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
-                                <a href="delete.php?id=<?=$record['id']?>" onclick="handleDelete(<?=$record['id']?>)" class="btn btn-danger"> Delete</a>
+                                <a href="edit_course.php?id=<?=$record['id']?>" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                <a href="delete_course.php?id=<?=$record['id']?>" onclick="handleDelete(<?=$record['id']?>)" class="btn btn-danger"> Delete</a>
                             </td>
                         </tr>
                     <?php } ?>

@@ -1,6 +1,6 @@
 <?=include('includes/header.php')?>
-<?=include('includes/sidebar.php')?>
-<?php 
+<?php $_SESSION['pg_name'] = 'classes'; ?>
+<?php
 //if id exist or id is equal to
 if(!isset($_GET['id']) || $_GET['id'] === 0) {
 
@@ -8,98 +8,110 @@ if(!isset($_GET['id']) || $_GET['id'] === 0) {
   header("Location: all_classes.php");
 }
 ?>
-<html>
-<head>
-    <!-- <link rel="stylesheet" href="assets/bootstrap.min.css" /> -->
-    <style>
-      .err {
-        color: "purple";
-        
-      }
-    </style>
-</head>
-<body>
+<?=include('includes/sidebar.php')?>
 
-    <?php
-        include("includes/connection.php");
-        
-        // getting all departments
-        $q = "SELECT * FROM `student_classes`";
-        $records = mysqli_query($conn, $q);
-        if($records === FALSE) {
-            echo mysqli_error();
-            die("Something went wrong!");
-        }
-
-        // getting user record
-        $q = "SELECT * FROM `student_classes` WHERE id =".$_GET['id'];
-        $user = mysqli_query($conn, $q);
-        if($user === FALSE) {
-            echo mysqli_error();
-            die("Something went wrong!");
-        }
-
-        if($user->num_rows === 0) {
-          // No user found with that id
-          header("Location: all_classes.php");
-        }
-        $user = $user->fetch_assoc();
-
-        if(isset($_SESSION['errors']) && !empty($_SESSION['errors'])) {
-          $errors = $_SESSION['errors'];
-        }
-    ?>
-
-    <div class="container">
-        <h1>Edit class</h1>
-        <div class="panel panel-default">
-            <div class="panel-heading"  >
-                Update classes
-            </div>
-            <div class='panel-body'>
-            <?php if(isset($_SESSION['response']) && $_SESSION['response']['type'] == "error" ) { ?>
-                <div class="alert alert-danger">
-                  <?=$_SESSION['response']['msg']?>
-                </div>
-                <?php } ?>
-             
-                <div class="col-md-6">
-                <form action="edit_class.php?id=<?=$_GET['id']?>" method="POST">
-                  <input type="hidden" name="id" value="<?=$user['id']?>">
-                    <div class="form-group">
-                        <label>class Title</label>
-                        <input type="text" name="Title" class="form-control" value="<?=$user['Title']?>">
-                        <?=(isset($errors['Title']))?$errors['Title']:""?>
-                    </div>
-                    <div class="form-group">
-                        <label>subject</label>
-                        <input type="text" name="subject" class="form-control" value="<?=$user['subject']?>">
-                        <?=(isset($errors['subject']))?$errors['subject']:""?>
-                    </div>
-                    <div class="form-group">
-                        <label>description</label>
-                        <textarea name="description" class="form-control" id="" cols="30" rows="10"><?=$user['description']?></textarea>
-                        <?=(isset($errors['description']))?$errors['description']:""?>
-                    </div>
-                    <div class="form-group">
-                        <label>date</label>
-                        <textarea name="date_created" class="form-control" id="" cols="30" rows="10"><?=$user['date_created']?></textarea>
-                        <?=(isset($errors['date_created']))?$errors['date_created']:""?>
-                    </div>
-                    
-
-                    <div class="form-group">
-                        <input type="submit" class="btn btn-success" name="submit" value="Save class">
-                    </div>
-                </form>
-                </div>
-            </div>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">Edit class</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <a href="all_classes.php" class="btn btn-default float-right"><i class="fa fa-arrow-left"></i> Back</a>
         </div>
-        <a href="all_classes.php">Back</a>
-    </div>
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+  <?php
+      include("includes/connection.php");
 
-</body>
-</html>
+      // getting all departments
+      $q = "SELECT * FROM `classes`";
+      $records = mysqli_query($conn, $q);
+      if($records === FALSE) {
+          echo mysqli_error();
+          die("Something went wrong!");
+      }
+
+      // getting user record
+      $q = "SELECT * FROM `classes` WHERE id =".$_GET['id'];
+      $class = mysqli_query($conn, $q);
+      if($class === FALSE) {
+          echo mysqli_error();
+          die("Something went wrong!");
+      }
+
+      if($class->num_rows === 0) {
+        // No user found with that id
+        header("Location: all_classes.php");
+      }
+      $class = $class->fetch_assoc();
+
+      if(isset($_SESSION['errors']) && !empty($_SESSION['errors'])) {
+        $errors = $_SESSION['errors'];
+      }
+  ?>
+  <!-- Main content -->
+  <section class="content">
+
+    <div class="container-fluid">
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <section class="col-lg-12 connectedSortable">
+          <!-- Application buttons -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Update class</h3>
+            </div>
+            <div class="card-body">
+              <?php if(isset($_SESSION['response'])) { ?>
+              <div class="callout callout-<?=($_SESSION['response']['type'] =='success')?'success':'danger'?>">
+                  <h5><?=$_SESSION['response']['msg']?></h5>
+                </div>
+              <?php } ?>
+              <form action="edit_class.php?id=<?=$_GET['id']?>" method="POST">
+                <input type="hidden" name="id" value="<?=$class['id']?>">
+                  <div class="form-group">
+                      <label>class Title</label>
+                      <input type="text" name="Title" class="form-control" value="<?=$class['class_Title']?>">
+                      <?=(isset($errors['Title']))?$errors['Title']:""?>
+                  </div>
+                  <div class="form-group">
+                      <label>subject</label>
+                      <input type="text" name="subject" class="form-control" value="<?=$class['subject']?>">
+                      <?=(isset($errors['subject']))?$errors['subject']:""?>
+                  </div>
+                  <div class="form-group">
+                      <label>description</label>
+                      <textarea name="description" class="form-control" id="" cols="30" rows="10"><?=$class['description']?></textarea>
+                      <?=(isset($errors['description']))?$errors['description']:""?>
+                  </div>
+
+                  <div class="form-group">
+                      <input type="submit" class="btn btn-success" name="submit" value="Save class">
+                  </div>
+              </form>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </section>
+        <!-- /.Left col -->
+      </div>
+      <!-- /.row (main row) -->
+    </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+
+
+
+<!-- this is validation section -->
 
 <?php
 
@@ -119,7 +131,7 @@ if(isset($_POST['submit'])) {
    if($fields['address'] === "") {
      $errors['address'] = "<p class='err'>Please provide address</p>";
    }
-    
+
 
    if(!empty($errors)) {
      $_SESSION['errors'] = $errors;
@@ -138,10 +150,10 @@ if(isset($_POST['submit'])) {
     }
 
     if (mysqli_query($conn,$q) === true){
-      
+
       $response = array(
-        "type" => "sucess",
-        "msg" => " department updated  sucessfully"
+        "type" => "success",
+        "msg" => " department updated  successfully"
       );
       $_SESSION['response'] = $response;
      header("location: departments.php");
@@ -163,5 +175,5 @@ if(isset($_POST['submit'])) {
 if(isset($_SESSION['errors'])) {
     unset($_SESSION['errors']);
 }
-?>
-<?=include('includes/footer.php')?>
+ ?>
+<?= include('includes/footer.php')?>

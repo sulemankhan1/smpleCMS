@@ -27,7 +27,7 @@ if(isset($_POST['add_class'])) {
   }
 
 
-   $q = "INSERT INTO `student_classes`
+   $q = "INSERT INTO `classes`
        (`class_Title`,  `subject`, `description`)
        VALUES
        ('".$_POST['class_Title']."', '".$_POST['subject']."', '".$_POST['description']."')";

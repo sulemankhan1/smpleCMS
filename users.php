@@ -2,7 +2,9 @@
 <?php if($_SESSION['type'] === "student") {
   header("Location: index.php");
   exit;
-} ?>
+}
+$_SESSION['pg_name'] = 'users';
+?>
 <?=include('includes/sidebar.php')?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -70,7 +72,7 @@
                         <tr>
                             <td><?=$record['id']?></td>
                             <td>
-                              <?php if($record['profile_pic'] == "") { ?>
+                              <?php if($record['profile_pic'] == "" || !file_exists('uploads/'.$record['profile_pic'])) { ?>
                                 <img src="<?='uploads/default.png'?>" width="100">
                               <?php } else { ?>
                                 <a href="<?='uploads/'.$record['profile_pic']?>" target="_blank">

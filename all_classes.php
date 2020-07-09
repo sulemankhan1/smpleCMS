@@ -1,5 +1,8 @@
 
 <?=include('includes/header.php')?>
+<?php
+$_SESSION['pg_name'] = 'classes';
+ ?>
 <?=include('includes/sidebar.php')?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -22,7 +25,7 @@
   <?php
       include("includes/connection.php");
 
-      $q = "SELECT * FROM `student_classes`";
+      $q = "SELECT * FROM `classes`";
 
 
       $records = mysqli_query($conn, $q);
@@ -79,7 +82,7 @@
                             <td><?=$record['date_created']?></td>
                             <td>
                                 <a href="edit_class.php?id=<?=$record['id']?>" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
-                                <a href="delete_classes.php?id=<?=$record['id']?>" onclick="handleDelete(<?=$record['id']?>)" class="btn btn-danger"> Delete</a>
+                                <a href="delete_classes.php?id=<?=$record['id']?>" onclick="return confirm('Are you sure')" class="btn btn-danger"> Delete</a>
                             </td>
                         </tr>
                     <?php } ?>
@@ -99,14 +102,5 @@
   </section>
   <!-- /.content -->
 </div>
-
-<script>
-  function handleDelete(id) {
-    let c = confirm('Are you sure')
-    if(c) {
-      window.open("edit_class.php?id="+id, "_self");
-    }
-  }
-</script>
 
 <?=include('includes/footer.php')?>

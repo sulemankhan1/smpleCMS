@@ -5,6 +5,8 @@
 if($_SESSION['type'] === "student"){
   header("Location: std_dashboard.php");
 }
+
+$_SESSION['pg_name'] = 'dashboard';
 ?>
 <?=include('includes/sidebar.php')?>
 <!-- Content Wrapper. Contains page content -->

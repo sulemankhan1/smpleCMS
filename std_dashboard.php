@@ -3,6 +3,7 @@
 if($_SESSION['type'] !== "student"){
   header("Location: index.php");
 }
+$_SESSION['pg_name'] = 'dashboard';
 ?>
 <?=include('includes/sidebar.php')?>
 <!-- Content Wrapper. Contains page content -->
@@ -18,7 +19,7 @@ if($_SESSION['type'] !== "student"){
           // print_r($_SESSION);
           // die();
           ?>
-      
+
         </div><!-- /.col -->
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -48,7 +49,7 @@ if($_SESSION['type'] !== "student"){
           <i class="fas fa-house-user"></i> All classes
             </a>
 
-              
+
 
             </div>
             <!-- /.card-body -->

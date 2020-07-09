@@ -3,7 +3,7 @@
   header("Location: index.php");
   exit;
 }
-$_SESSION['pg_name'] = 'departments';
+$_SESSION['pg_name'] = 'courses';
 ?>
 <?=include('includes/sidebar.php')?>
 
@@ -14,7 +14,7 @@ $_SESSION['pg_name'] = 'departments';
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Edit department</h1>
+          <h1 class="m-0 text-dark">Edit course</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <a href="users.php" class="btn btn-default float-right"><i class="fa fa-arrow-left"></i> Back</a>
@@ -29,27 +29,27 @@ $_SESSION['pg_name'] = 'departments';
   <?php
         include("includes/connection.php");
 
-        // getting all departments
-        $q = "SELECT * FROM `departments`";
-        $records = mysqli_query($conn, $q);
-        if($records === FALSE) {
+        // Getting Users (Teaches)
+        $q = "SELECT * FROM `users` WHERE type = 'teacher'";
+        $teachers = mysqli_query($conn, $q);
+        if($teachers === FALSE) {
             echo mysqli_error();
             die("Something went wrong!");
         }
 
         // getting user record
-        $q = "SELECT * FROM `departments` WHERE id =".$_GET['id'];
-        $user = mysqli_query($conn, $q);
-        if($user === FALSE) {
+        $q = "SELECT * FROM `courses` WHERE id =".$_GET['id'];
+        $course = mysqli_query($conn, $q);
+        if($course === FALSE) {
             echo mysqli_error();
             die("Something went wrong!");
         }
 
-        if($user->num_rows === 0) {
+        if($course->num_rows === 0) {
           // No user found with that id
-          header("Location: departments.php");
+          header("Location: courses.php");
         }
-        $user = $user->fetch_assoc();
+        $course = $course->fetch_assoc();
 
         if(isset($_SESSION['errors']) && !empty($_SESSION['errors'])) {
           $errors = $_SESSION['errors'];
@@ -64,7 +64,7 @@ $_SESSION['pg_name'] = 'departments';
           <!-- Application buttons -->
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Update department </h3>
+              <h3 class="card-title">Update Course </h3>
             </div>
             <div class="card-body">
               <?php if(isset($_SESSION['response'])) { ?>
@@ -72,27 +72,27 @@ $_SESSION['pg_name'] = 'departments';
                   <h5><?=$_SESSION['response']['msg']?></h5>
                 </div>
               <?php } ?>
-              <form action="edit_department.php?id=<?=$_GET['id']?>" method="POST">
-                    <input type="hidden" name="id" value="<?=$user['id']?>">
-                      <div class="form-group">
-                          <label>Username</label>
-                          <input type="text" name="name" class="form-control" value="<?=$user['name']?>">
-                          <?=(isset($errors['name']))?$errors['name']:""?>
-                      </div>
-                      <div class="form-group">
-                          <label>Phone</label>
-                          <input type="text" name="phone" class="form-control" value="<?=$user['phone']?>">
-                          <?=(isset($errors['phone']))?$errors['phone']:""?>
-                      </div>
-                      <div class="form-group">
-                          <label>Address</label>
-                          <textarea name="address" class="form-control" id="" cols="30" rows="10"><?=$user['address']?></textarea>
-                          <?=(isset($errors['address']))?$errors['address']:""?>
-                      </div>
-                      <div class="form-group">
-                          <input type="submit" class="btn btn-success" name="submit" value="Save department">
-                      </div>
-                  </form>
+              <form action="submission/courses.php" method="post">
+                <input type="hidden" name="id" value="<?=$course['id']?>">
+                  <div class="form-group">
+                      <label>Course Name</label>
+                      <input type="text" name="name" class="form-control <?=(isset($errors['name']))?"is-invalid":""?>" value="<?=$course['name']?>">
+                      <?=(isset($errors['name']))?$errors['name']:""?>
+                  </div>
+                  <div class="form-group">
+                      <label>Select Teacher</label>
+                      <select class="form-control" name="teacher_id">
+                        <option value=""> -- select Teacher -- </option>
+                        <?php while($user = $teachers->fetch_assoc()) { ?>
+                          <option value="<?=$user['id']?>" <?=($user['id'] == $course['teacher_id'])?'selected':''?>><?=$user['name']?></option>
+                        <?php } ?>
+                      </select>
+                      <?=(isset($errors['address']))?$errors['address']:""?>
+                  </div>
+                  <div class="form-group">
+                      <input type="submit" class="btn btn-success" name="update_course" value="Save department">
+                  </div>
+              </form>
             </div>
             <!-- /.card-body -->
           </div>
@@ -106,6 +106,8 @@ $_SESSION['pg_name'] = 'departments';
   <!-- /.content -->
 </div>
 <?php
+
+
 if(isset($_POST['submit'])) {
 
    // check if all fields are provided

@@ -17,8 +17,8 @@
         <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
         <li class="nav-header">Pages</li>
-        <li class="nav-item">
-          <a href="index.php" class="nav-link">
+        <li class="nav-item <?=($_SESSION['pg_name'] == 'dashboard')?'menu-open':''?>">
+          <a href="index.php" class="nav-link <?=($_SESSION['pg_name'] == 'dashboard')?'active':''?>" onclick="triger_page_change(dashboard)">
             <i class="nav-icon far fa-calendar-alt"></i>
             <p>
               Dashboard
@@ -26,9 +26,32 @@
             </p>
           </a>
         </li>
+        <li class="nav-item has-treeview <?=($_SESSION['pg_name'] == 'courses')?'menu-open':''?>">
+          <a href="#" class="nav-link <?=($_SESSION['pg_name'] == 'courses')?'active':''?>">
+            <i class="nav-icon far fa-envelope"></i>
+            <p>
+              Courses
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="add_course.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Add Course</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="courses.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>All Courses</p>
+              </a>
+            </li>
+          </ul>
+        </li>
         <?php if($_SESSION['type'] === "teacher") { ?>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+          <li class="nav-item has-treeview <?=($_SESSION['pg_name'] == 'departments')?'menu-open':''?>">
+            <a href="#" class="nav-link <?=($_SESSION['pg_name'] == 'departments')?'active':''?>">
               <i class="nav-icon far fa-envelope"></i>
               <p>
                 Departments
@@ -50,8 +73,8 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+          <li class="nav-item has-treeview <?=($_SESSION['pg_name'] == 'users')?'menu-open':''?>">
+            <a href="#" class="nav-link <?=($_SESSION['pg_name'] == 'users')?'active':''?>">
               <i class="nav-icon far fa-envelope"></i>
               <p>
                 Users
@@ -76,8 +99,8 @@
           </li>
         <?php } ?>
 
-        <li class="nav-item has-treeview">
-          <a href="#" class="nav-link">
+        <li class="nav-item has-treeview <?=($_SESSION['pg_name'] == 'classes')?'menu-open':''?>">
+          <a href="#" class="nav-link <?=($_SESSION['pg_name'] == 'classes')?'active':''?>">
             <i class="nav-icon far fa-envelope"></i>
             <p>
               Classes
