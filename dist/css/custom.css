@@ -1,0 +1,12 @@
+.user-panel.mt-3.pb-3.mb-3.d-flex {
+  margin-bottom: 0px !important;
+}
+
+a.d-block {
+  color: #333 !important;
+}
+
+.img-circle {
+  width: 30px !important;
+  height: 30px !important;
+}
