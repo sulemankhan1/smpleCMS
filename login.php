@@ -22,13 +22,13 @@
                     <?php } ?>
                     <form action="submission/users.php" method="post">
                         <div class="form-group">
-                            <input type="email" name="email" class="form-control" placeholder="Your Email *" value="" />
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Your Email *" value="" />
                         </div>
                         <div class="form-group">
-                            <input type="password" name="password" class="form-control" placeholder="Your Password *" value="" />
+                            <input type="password" name="password" class="form-control" id="password" placeholder="Your Password *" value="" />
                         </div>
                         <div class="form-group">
-                            <input type="submit" name="login" class="btnSubmit" value="Login" />
+                            <input type="button" name="login" id="btnSubmit" class="btnSubmit" value="Login" />
                         </div>
                         <div class="form-group">
                             <a href="forget.php" class="ForgetPwd">Forget Password?</a>
@@ -83,6 +83,35 @@
         </div>
   </body>
 </html>
+<script>
+
+  $('#btnSubmit').click(function(e){
+      let email = $('#email').val();
+      let password = $('#password').val();
+
+      if(email == "" || password == "") {
+        alert("Please fill all fields first");
+        return;
+      }
+
+      let myData = {'email': email, 'password': password, 'login': 'login'};
+
+      $.ajax({
+        url: "submission/users.php",
+        type: 'POST',
+        data: myData,
+        success: function(res) {
+          let result = JSON.parse(res);
+          if(result.type == 'error') {
+            alert(result.msg);
+          } else {
+            window.open(result.url, '_self');
+          }
+        }
+      })
+
+  });
+</script>
 <?php
 if(isset($_SESSION['errors'])) {
   unset($_SESSION['errors']);

@@ -68,6 +68,17 @@ if(!isset($_GET['id']) || $_GET['id'] === 0) {
             <div class="card-header">
               <h3 class="card-title">Update class</h3>
             </div>
+            <?php
+              include("includes/connection.php");
+
+              // Getting Users (Teaches)
+              $q = "SELECT * FROM `courses` WHERE department_id = ".$_SESSION['department_id'];
+              $courses = mysqli_query($conn, $q);
+              if($courses === FALSE) {
+                  echo mysqli_error();
+                  die("Something went wrong!");
+              }
+              ?>
             <div class="card-body">
               <?php if(isset($_SESSION['response'])) { ?>
               <div class="callout callout-<?=($_SESSION['response']['type'] =='success')?'success':'danger'?>">
@@ -76,6 +87,16 @@ if(!isset($_GET['id']) || $_GET['id'] === 0) {
               <?php } ?>
               <form action="edit_class.php?id=<?=$_GET['id']?>" method="POST">
                 <input type="hidden" name="id" value="<?=$class['id']?>">
+                <div class="form-group">
+                    <label>Select Course</label>
+                    <select class="form-control" name="course_id">
+                      <option value=""> -- Select Course -- </option>
+                      <?php while($course = $courses->fetch_assoc()) { ?>
+                        <option value="<?=$course['id']?>" <?=($course['id'] == $class['course_id'])?'selected':''?>><?=$course['name']?></option>
+                      <?php } ?>
+                    </select>
+                    <?=(isset($errors['address']))?$errors['address']:""?>
+                </div>
                   <div class="form-group">
                       <label>class Title</label>
                       <input type="text" name="Title" class="form-control" value="<?=$class['class_Title']?>">
@@ -131,6 +152,9 @@ if(isset($_POST['submit'])) {
    if($fields['address'] === "") {
      $errors['address'] = "<p class='err'>Please provide address</p>";
    }
+   if($fields['course_id'] === "") {
+     $errors['course_id'] = "<p class='err'>Please Select Course</p>";
+   }
 
 
    if(!empty($errors)) {
@@ -143,6 +167,7 @@ if(isset($_POST['submit'])) {
     $q .= " `name` = '". $_POST['name']."'";
     $q .= ", phone = '". $_POST['phone'] ."'";
     $q .= ", address = '". $_POST['address'] ."'";
+    $q .= ", course_id = '". $_POST['course_id'] ."'";
     $q .= " WHERE `departments`.`id` = ". $id;
 
     if(mysqli_query($conn, $q) === false) {

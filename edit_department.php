@@ -48,6 +48,7 @@ $_SESSION['pg_name'] = 'departments';
         if($user->num_rows === 0) {
           // No user found with that id
           header("Location: departments.php");
+          exit;
         }
         $user = $user->fetch_assoc();
 
@@ -147,6 +148,7 @@ if(isset($_POST['submit'])) {
       );
       $_SESSION['response'] = $response;
      header("location: departments.php");
+     exit;
     }
       else{
       $response = array(
@@ -155,11 +157,13 @@ if(isset($_POST['submit'])) {
       );
       $_SESSION['response'] = $response;
       header("location : edit_department.php");
+      exit;
     }
 
 
     // add message for success user updated
     header("location: departments.php");
+    exit;
 }
 
 if(isset($_SESSION['errors'])) {

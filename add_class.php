@@ -37,6 +37,17 @@ $_SESSION['pg_name'] = 'classes';
             <div class="card-header">
               <h3 class="card-title">Create a New class</h3>
             </div>
+            <?php
+              include("includes/connection.php");
+
+              // Getting Users (Teaches)
+              $q = "SELECT * FROM `courses` WHERE department_id = ".$_SESSION['department_id'];
+              $courses = mysqli_query($conn, $q);
+              if($courses === FALSE) {
+                  echo mysqli_error();
+                  die("Something went wrong!");
+              }
+              ?>
             <div class="card-body">
               <?php if(isset($_SESSION['response'])) { ?>
               <div class="callout callout-<?=($_SESSION['response']['type'] =='success')?'success':'danger'?>">
@@ -44,6 +55,16 @@ $_SESSION['pg_name'] = 'classes';
                 </div>
               <?php } ?>
               <form action="submission/classes.php" method="post" >
+                <div class="form-group">
+                    <label>Select Course</label>
+                    <select class="form-control" name="course_id">
+                      <option value=""> -- Select Course -- </option>
+                      <?php while($course = $courses->fetch_assoc()) { ?>
+                        <option value="<?=$course['id']?>"><?=$course['name']?></option>
+                      <?php } ?>
+                    </select>
+                    <?=(isset($errors['address']))?$errors['address']:""?>
+                </div>
               <div class="form-group">
                       <label>class Title</label>
                       <input type="text" name="class_Title" class="form-control <?=(isset($errors['class_Title']))?"is-invalid":""?>" >
@@ -81,51 +102,6 @@ $_SESSION['pg_name'] = 'classes';
 
 <!-- this is validation section -->
 
-<?php
-// ADD USER from admin side and check weather all fields is provided or not:
-
-// if(isset($_POST['add_class'])) {
-//   // check if all fields are provided
-//
-//   $fields = $_POST;
-//   $errors = [];
-//   if($fields['class_Title'] === "") {
-//     $errors['class_Title'] = "<p class='err text-danger'>Please provide class Title</p>";
-//   }
-//   if($fields['subject'] === "") {
-//     $errors['subject'] = "<p class='err text-danger'>Please provide subject</p>";
-//   }
-//   if($fields['description'] === "") {
-//     $errors['description'] = "<p class='err text-danger'>Please provide description</p>";
-//   }
-//   if($fields['date_created'] === "") {
-//     $errors['date_created'] = "<p class='err text-danger'>Please provide date of creation of class</p>";
-//   }
-//
-//
-//   if(!empty($errors)) {
-//     $_SESSION['errors'] = $errors;
-//     header("Location: add_class.php");
-//     exit;
-//   }
-//
-//
-//    $q = "INSERT INTO `classes`
-//        (`class_Title`, `subject`, `description`, `date_created`)
-//        VALUES
-//        ('".$_POST['class_Title']."', '".$_POST['subject']."','".$_POST['description']."', '".$_POST['date_created']."')";
-//
-//
-//    if(mysqli_query($conn, $q) === false) {
-//        die("Error Found!");
-//    }
-//
-//    $_SESSION['response'] = array(
-//      'type' => 'success',
-//      'msg' => "class have been added successfully successfully!. "
-//    );
-
-?>
 
 <?php
 if(isset($_SESSION['errors'])) {

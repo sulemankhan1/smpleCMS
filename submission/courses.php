@@ -14,6 +14,9 @@ if(isset($_POST['add_course'])) {
    if($fields['teacher_id'] === "") {
      $errors['teacher_id'] = "<p class='err text-danger'>Please Select Teacher</p>";
    }
+   if($fields['department_id'] === "") {
+     $errors['department_id'] = "<p class='err text-danger'>Please Select Department</p>";
+   }
 
    if(!empty($errors)) {
      $_SESSION['errors'] = $errors;
@@ -27,9 +30,9 @@ if(isset($_POST['add_course'])) {
 
 
     $q = "INSERT INTO `courses`
-        (`name`,  `teacher_id`)
+        (`name`,  `teacher_id`, `department_id`)
         VALUES
-        ('".$_POST['name']."', ".$_POST['teacher_id'].")";
+        ('".$_POST['name']."', ".$_POST['teacher_id'].", '".$_POST['department_id']."')";
 
     if(mysqli_query($conn, $q) === false) {
         die("Error Found!");
@@ -57,6 +60,10 @@ if(isset($_POST['update_course'])) {
      $errors['teacher_id'] = "<p class='err text-danger'>Please Select Teacher</p>";
    }
 
+   if($fields['department_id'] === "") {
+     $errors['department_id'] = "<p class='err text-danger'>Please Select Department</p>";
+   }
+
    if(!empty($errors)) {
      $_SESSION['errors'] = $errors;
      $_SESSION['response'] = array(
@@ -70,6 +77,7 @@ if(isset($_POST['update_course'])) {
     $q = "UPDATE `courses` SET";
     $q .= " `name` = '". $_POST['name']."'";
     $q .= ", teacher_id = '". $_POST['teacher_id'] ."'";
+    $q .= ", department_id = '". $_POST['department_id'] ."'";
     $q .= " WHERE `courses`.`id` = ". $id;
 
     if(mysqli_query($conn, $q) === false) {

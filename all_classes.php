@@ -25,7 +25,8 @@ $_SESSION['pg_name'] = 'classes';
   <?php
       include("includes/connection.php");
 
-      $q = "SELECT * FROM `classes`";
+      $q = "SELECT `classes`.*, `courses`.`name` as `course_name` FROM `classes`
+      JOIN `courses` ON `classes`.`course_id` = `courses`.`id`";
 
 
       $records = mysqli_query($conn, $q);
@@ -64,11 +65,14 @@ $_SESSION['pg_name'] = 'classes';
                   <thead>
                     <tr>
                         <th>ID</th>
-                        <th>class Title</th>
-                        <th>subject</th>
-                        <th>description</th>
-                        <th>date_created</th>
-                        <th>Action</th>
+                        <th>Class Title</th>
+                        <th>Subject</th>
+                        <th>Description</th>
+                        <th>Course Name</th>
+                        <th>Date Added</th>
+                        <?php if($_SESSION['type'] != 'student') { ?>
+                          <th>Action</th>
+                        <?php } ?>
                     </tr>
                   </thead>
                   <tbody>
@@ -79,11 +83,14 @@ $_SESSION['pg_name'] = 'classes';
                             <td><?=$record['class_Title']?></td>
                             <td><?=$record['subject']?></td>
                             <td><?=$record['description']?></td>
-                            <td><?=$record['date_created']?></td>
-                            <td>
-                                <a href="edit_class.php?id=<?=$record['id']?>" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
-                                <a href="delete_classes.php?id=<?=$record['id']?>" onclick="return confirm('Are you sure')" class="btn btn-danger"> Delete</a>
-                            </td>
+                            <td><?=$record['course_name']?></td>
+                            <td><?=date('D d M Y | h:i a',strtotime($record['date_created']))?></td>
+                            <?php if($_SESSION['type'] != 'student') { ?>
+                              <td>
+                                  <a href="edit_class.php?id=<?=$record['id']?>" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                  <a href="delete_classes.php?id=<?=$record['id']?>" onclick="return confirm('Are you sure')" class="btn btn-danger"> Delete</a>
+                              </td>
+                            <?php } ?>
                         </tr>
                     <?php } ?>
                   </tbody>

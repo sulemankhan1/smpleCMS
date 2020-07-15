@@ -1,5 +1,6 @@
 <?=include('includes/header.php')?>
-<?php if($_SESSION['type'] === "student") {
+<?php
+if($_SESSION['type'] === "student") {
   header("Location: index.php");
   exit;
 }
@@ -29,18 +30,18 @@ $_SESSION['pg_name'] = 'courses';
     <?php
       include("includes/connection.php");
 
-      // Getting courses
-      $q = "SELECT * FROM `courses`";
-      $records = mysqli_query($conn, $q);
-      if($records === FALSE) {
+      // Getting Users (Teaches)
+      $q = "SELECT * FROM `users` WHERE type = 'teacher'";
+      $teachers = mysqli_query($conn, $q);
+      if($teachers === FALSE) {
           echo mysqli_error();
           die("Something went wrong!");
       }
 
-      // Getting Users (Teaches)
-      $q = "SELECT * FROM `users` WHERE type = 'teacher'";
-      $teachers = mysqli_query($conn, $q);
-      if($records === FALSE) {
+      // Getting deparmtnets
+      $q = "SELECT * FROM `departments`";
+      $departments = mysqli_query($conn, $q);
+      if($departments === FALSE) {
           echo mysqli_error();
           die("Something went wrong!");
       }
@@ -78,9 +79,19 @@ $_SESSION['pg_name'] = 'courses';
                   <div class="form-group">
                       <label>Select Teacher</label>
                       <select class="form-control" name="teacher_id">
-                        <option value=""> -- select Teacher -- </option>
+                        <option value=""> --  Select Teacher -- </option>
                         <?php while($user = $teachers->fetch_assoc()) { ?>
                           <option value="<?=$user['id']?>"><?=$user['name']?></option>
+                        <?php } ?>
+                      </select>
+                      <?=(isset($errors['address']))?$errors['address']:""?>
+                  </div>
+                  <div class="form-group">
+                      <label>Select Department</label>
+                      <select class="form-control" name="department_id">
+                        <option value=""> -- Select Department -- </option>
+                        <?php while($department = $departments->fetch_assoc()) { ?>
+                          <option value="<?=$department['id']?>"><?=$department['name']?></option>
                         <?php } ?>
                       </select>
                       <?=(isset($errors['address']))?$errors['address']:""?>

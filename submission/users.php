@@ -7,7 +7,7 @@ if(isset($_POST['add_user'])) {
    // check if all fields are provided
     $pp = $_FILES['profile_pic'];
 
-    
+
    $fields = $_POST;
    $errors = [];
    if(!($pp['type'] === "image/jpeg" || $pp['type'] === "image/jpg" || $pp['type'] === "image/png")) {
@@ -49,7 +49,7 @@ if(isset($_POST['add_user'])) {
      header("Location: ../add_user.php");
      exit;
    }
-   
+
    // upload picture to the server
    move_uploaded_file($pp['tmp_name'], '../uploads/'.$pp['name']);
 
@@ -85,14 +85,14 @@ if(isset($_POST['login'])) {
   $row = $result->fetch_assoc();
   if(empty($row)) {
     $response = "Invalid email or password";
-    header('Location: ../login.php');
+    echo json_encode(array('type' => 'error', 'msg' => $response));
     exit;
   }
 
   // check password
   if($fields['password'] !== $row['password']) {
     $response = "Invalid email or password";
-    header('Location: ../login.php');
+    echo json_encode(array('type' => 'error', 'msg' => $response));
     exit;
   }
 
@@ -101,10 +101,12 @@ if(isset($_POST['login'])) {
     'id' => $row['id'],
     'name' => $row['name'],
     'profile_pic' => $row['profile_pic'],
+    'department_id' => $row['department_id'],
     'type' => $row['type'],
     'is_logged_in' => true
   );
-  header('Location: ../index.php');
+  echo json_encode(array('type' => 'success', 'url' => 'index.php'));
+  exit;
 }
 
 // REGISTER

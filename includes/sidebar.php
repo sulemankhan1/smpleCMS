@@ -35,12 +35,14 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="add_course.php" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Add Course</p>
-              </a>
-            </li>
+            <?php if($_SESSION['type'] != 'student') { ?>
+              <li class="nav-item">
+                <a href="add_course.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add Course</p>
+                </a>
+              </li>
+            <?php } ?>
             <li class="nav-item">
               <a href="courses.php" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>

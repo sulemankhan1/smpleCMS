@@ -1,8 +1,9 @@
 <?=include('includes/header.php')?>
-<?php if($_SESSION['type'] === "student") {
-  header("Location: index.php");
-  exit;
-}
+<?php
+//  if($_SESSION['type'] === "student") {
+//   header("Location: index.php");
+//   exit;
+// }
 $_SESSION['pg_name'] = 'courses';
 ?>
 <?=include('includes/sidebar.php')?>
@@ -33,7 +34,7 @@ $_SESSION['pg_name'] = 'courses';
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">All Courses </h3>
-              <a href="add_department.php" class="btn  btn-outline-success btn-sm float-right"><i class="fa fa-plus"></i> Add DEPARTMENT</a>
+              <a href="add_department.php" class="btn  btn-outline-success btn-sm float-right"><i class="fa fa-plus"></i> Add Course</a>
             </div>
             <div class="card-body">
               <?php if(isset($_SESSION['response'])) { ?>
@@ -44,8 +45,9 @@ $_SESSION['pg_name'] = 'courses';
               <?php
                   include("includes/connection.php");
 
-                  $q = "SELECT `courses`.*, `users`.`name` as `teacher_name` FROM `courses`
+                  $q = "SELECT `courses`.*, `users`.`name` as `teacher_name`, `departments`.`name` as `department_name` FROM `courses`
                   JOIN `users` ON `courses`.`teacher_id` = `users`.`id`
+                  JOIN `departments` ON `courses`.`department_id` = `departments`.`id`
                   ";
 
                   $records = mysqli_query($conn, $q);
@@ -61,7 +63,10 @@ $_SESSION['pg_name'] = 'courses';
                         <th>ID </th>
                         <th>Name</th>
                         <th>Teacher</th>
-                        <th>Action</th>
+                        <th>Department</th>
+                        <?php if($_SESSION['type'] != 'student') { ?>
+                          <th>Action</th>
+                        <?php } ?>
                     </tr>
                   </thead>
                   <tbody>
@@ -70,11 +75,13 @@ $_SESSION['pg_name'] = 'courses';
                             <td><?=$record['id']?></td>
                             <td><?=$record['name']?></td>
                             <td><?=$record['teacher_name']?></td>
-
-                            <td>
-                                <a href="edit_course.php?id=<?=$record['id']?>" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
-                                <a href="delete_course.php?id=<?=$record['id']?>" onclick="handleDelete(<?=$record['id']?>)" class="btn btn-danger"> Delete</a>
-                            </td>
+                            <td><?=$record['department_name']?></td>
+                            <?php if($_SESSION['type'] != 'student') { ?>
+                              <td>
+                                  <a href="edit_course.php?id=<?=$record['id']?>" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                  <a href="delete_course.php?id=<?=$record['id']?>" onclick="handleDelete(<?=$record['id']?>)" class="btn btn-danger"> Delete</a>
+                              </td>
+                            <?php } ?>
                         </tr>
                     <?php } ?>
                   </tbody>

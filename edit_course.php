@@ -37,6 +37,14 @@ $_SESSION['pg_name'] = 'courses';
             die("Something went wrong!");
         }
 
+        // Getting deparmtnets
+        $q = "SELECT * FROM `departments`";
+        $departments = mysqli_query($conn, $q);
+        if($departments === FALSE) {
+            echo mysqli_error();
+            die("Something went wrong!");
+        }
+
         // getting user record
         $q = "SELECT * FROM `courses` WHERE id =".$_GET['id'];
         $course = mysqli_query($conn, $q);
@@ -85,6 +93,16 @@ $_SESSION['pg_name'] = 'courses';
                         <option value=""> -- select Teacher -- </option>
                         <?php while($user = $teachers->fetch_assoc()) { ?>
                           <option value="<?=$user['id']?>" <?=($user['id'] == $course['teacher_id'])?'selected':''?>><?=$user['name']?></option>
+                        <?php } ?>
+                      </select>
+                      <?=(isset($errors['address']))?$errors['address']:""?>
+                  </div>
+                  <div class="form-group">
+                      <label>Select Department</label>
+                      <select class="form-control" name="department_id">
+                        <option value=""> -- select Department -- </option>
+                        <?php while($department = $departments->fetch_assoc()) { ?>
+                          <option value="<?=$department['id']?>" <?=($department['id'] == $course['department_id'])?'selected':''?>><?=$department['name']?></option>
                         <?php } ?>
                       </select>
                       <?=(isset($errors['address']))?$errors['address']:""?>
